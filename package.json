@@ -1,0 +1,16 @@
+{
+  "name": "testing-matterjs",
+  "version": "0.1.0",
+  "description": "Just trying out matter-js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/djorak/testing-matterjs.git"
+  },
+  "author": "djorak",
+  "bugs": {
+    "url": "https://github.com/djorak/testing-matterjs/issues"
+  },
+  "dependencies": {
+    "asset-manager": "~0.3.8"
+  }
+}
