@@ -6,11 +6,23 @@
         MouseConstraint = Matter.MouseConstraint,
         Mouse = Matter.Mouse;
 
+    var UP = 0,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3;
+
     var _engine,
         _gui,
         _mouseConstraint,
         _sceneEvents = [],
         _canvas;
+
+    var _keyboardMap = {
+        38: UP,
+        39: RIGHT,
+        40: DOWN,
+        37: LEFT,
+    };
 
     var Test = {};
 
@@ -22,10 +34,10 @@
         Engine.run(_engine);
 
         document.querySelector('.reset-button').addEventListener('click', function(e) {
-            Test.pyramid();
+            Test.game();
         });
 
-        Test.pyramid();
+        Test.game();
     };
 
     // call init when the page has loaded fully
@@ -47,6 +59,39 @@
         World.add(_world, stack);
 
         var renderOptions = _engine.render.options;
+    };
+
+    Test.game = function() {
+        var _world = _engine.world;
+
+        Test.reset();
+
+        var scale = .5;
+        var car = Composites.car(150, 500, 150 * scale, 60 * scale, 45 * scale);
+        World.add(_world, car);
+
+        var renderOptions = _engine.render.options;
+        renderOptions.showAngleIndicator = true;
+
+        document.onkeydown = function(e) {
+            e = e || window.event;
+            switch(_keyboardMap[e.keyCode]) {
+                case UP:
+                    car.clear();
+                    break;
+                case DOWN:
+                    console.log('DOWN');
+                    break;
+                case LEFT:
+                    console.log('LEFT');
+                    break;
+                case RIGHT:
+                    console.log('RIGHT');
+                    break;
+                default:
+                    break;
+            }
+        };
     };
 
     Test.reset = function() {
