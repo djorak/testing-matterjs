@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Test - matter-js</title>
+    <meta charset="UTF-8">
+    <title>Test - matter-js</title>
 
     <link rel="stylesheet" href="./public/assets/css/app.css">
+    <link rel="stylesheet" href="./bower_components/skeleton-css/css/normalize.css">
+    <link rel="stylesheet" href="./bower_components/skeleton-css/css/skeleton.css">
 </head>
+
 <body>
-    <div class="canvas"></div>
-    <div class="controls">
-        <input class="reset-button" value="Reset" type="submit">
+    <div class="container">
+        <div class="row">
+            <div class="twelve columns">
+                <div class="canvas"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="ten columns">
+                a
+            </div>
+            <div class="two columns controls">
+                <input class="reset-button" value="Reset" type="submit">
+            </div>
+        </div>
     </div>
-	<script src="./bower_components/matter-js/build/matter-0.8.0.min.js"></script>
-	<script src="./public/assets/js/main.js"></script>
+
+    <script src="./bower_components/matter-js/build/matter-0.8.0.min.js"></script>
+    <script src="./public/assets/js/main.js"></script>
 </body>
+
 </html>

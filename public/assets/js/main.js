@@ -31,8 +31,17 @@
         // run the engine
         Engine.run(_engine);
 
+        var renderOptions = _engine.render.options,
+            canvas = _engine.render.canvas;
+
+        renderOptions.wireframes = false;
+
+        canvas.width = renderOptions.width = 960;
+        canvas.height = renderOptions.height = 600;
+
+
         document.querySelector('.reset-button').addEventListener('click', function(e) {
-            Test.game();
+            Test.car();
         });
 
         Test.car();
@@ -113,18 +122,20 @@
         _engine.world.gravity.x = 0;
         _engine.timing.timeScale = 1;
 
-        var offset = 25;
-        var ground = Bodies.rectangle(400, -offset, 800.5 + 2 * offset, 50.5, { isStatic: true }),
-           ceiling = Bodies.rectangle(400, 600 + offset, 800.5 + 2 * offset, 50.5, { isStatic: true }),
-          leftWall = Bodies.rectangle(-offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true }),
-         rightWall = Bodies.rectangle(800 + offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true });
+        var offset = -10,
+            canvas = _engine.render.canvas;
+
+        var ground = Bodies.rectangle(canvas.width / 2, canvas.height + offset, canvas.width, 50, { isStatic: true }),
+           ceiling = Bodies.rectangle(canvas.width / 2, -offset, canvas.width, 50, { isStatic: true }),
+          leftWall = Bodies.rectangle(-offset, canvas.height / 2, 50, canvas.height, { isStatic: true }),
+         rightWall = Bodies.rectangle(canvas.width + offset, canvas.height / 2, 50, canvas.height, { isStatic: true });
 
         // add the limits to the world
         World.add(_engine.world, [
             ground,
-            ceiling,
-            leftWall,
-            rightWall
+            //ceiling,
+            //leftWall,
+            //rightWall
         ]);
 
         // add a mouse controlled constraint
