@@ -1,16 +1,26 @@
 (function() {
-    var Engine = Matter.Engine,
-        World = Matter.World,
-        Bodies = Matter.Bodies,
-        Composites = Matter.Composites
+    var Bodies = Matter.Bodies,
+        Body = Matter.Body,
+        Common = Matter.Common,
+        Composites = Matter.Composites,
+        Engine = Matter.Engine,
+        Mouse = Matter.Mouse,
         MouseConstraint = Matter.MouseConstraint,
-        Mouse = Matter.Mouse;
+        World = Matter.World;
 
     var _engine,
         _gui,
         _mouseConstraint,
         _sceneEvents = [],
         _canvas;
+
+    var _keyboardMap = {
+        32: 'SPACE',
+        37: 'LEFT',
+        38: 'UP',
+        39: 'RIGHT',
+        40: 'DOWN'
+    };
 
     var Test = {};
 
@@ -22,10 +32,10 @@
         Engine.run(_engine);
 
         document.querySelector('.reset-button').addEventListener('click', function(e) {
-            Test.pyramid();
+            Test.game();
         });
 
-        Test.pyramid();
+        Test.car();
     };
 
     // call init when the page has loaded fully
@@ -47,6 +57,40 @@
         World.add(_world, stack);
 
         var renderOptions = _engine.render.options;
+    };
+
+    Test.car = function() {
+        var _world = _engine.world;
+
+        Test.reset();
+
+        var scale = .5;
+        var car = Composites.car(150, 500, 150 * scale, 60 * scale, 45 * scale);
+        World.add(_world, car);
+
+        var renderOptions = _engine.render.options;
+        renderOptions.showAngleIndicator = true;
+
+        document.onkeydown = function(e) {
+            e = e || window.event;
+
+            var carBody = car.bodies[0],
+                forceMagnitude = 0.04 * carBody.mass,
+                force = { x: 0, y: 0 };
+
+            switch(_keyboardMap[e.keyCode]) {
+                case 'UP':
+                case 'RIGHT':
+                    force.x = forceMagnitude;
+                    break;
+                case 'DOWN':
+                case 'LEFT':
+                    force.x = -forceMagnitude;
+                    break;
+            }
+
+            Body.applyForce(carBody, { x: 0, y: 0 }, force);
+        };
     };
 
     Test.reset = function() {
