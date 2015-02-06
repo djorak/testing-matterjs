@@ -1,4 +1,4 @@
-(function() {
+(function () {
     var Bodies = Matter.Bodies,
         Body = Matter.Body,
         Common = Matter.Common,
@@ -24,15 +24,35 @@
 
     var Test = {};
 
-    Test.init = function() {
+    Test.init = function () {
         _canvas = document.querySelector('.canvas');
         _engine = Engine.create(_canvas);
 
         // run the engine
         Engine.run(_engine);
 
-        document.querySelector('.reset-button').addEventListener('click', function(e) {
-            Test.game();
+        var renderOptions = _engine.render.options,
+            canvas = _engine.render.canvas;
+
+        renderOptions.wireframes = false;
+
+        canvas.width = renderOptions.width = 960;
+        canvas.height = renderOptions.height = 600;
+
+        _engine.world.bounds = {
+            min: {
+                x: -Infinity,
+                y: -Infinity
+            },
+            max: {
+                x: Infinity,
+                y: Infinity
+            }
+        }
+
+
+        document.querySelector('.reset-button').addEventListener('click', function (e) {
+            Test.car();
         });
 
         Test.car();
@@ -45,12 +65,12 @@
         window.attachEvent('load', Test.init);
     }
 
-    Test.pyramid = function() {
+    Test.pyramid = function () {
         var _world = _engine.world;
 
         Test.reset();
 
-        var stack = Composites.pyramid(100, 100, 15, 10, 0, 0, function(x, y, column, row) {
+        var stack = Composites.pyramid(100, 100, 15, 10, 0, 0, function (x, y, column, row) {
             return Bodies.circle(x, y, 20);
         });
 
@@ -59,7 +79,7 @@
         var renderOptions = _engine.render.options;
     };
 
-    Test.car = function() {
+    Test.car = function () {
         var _world = _engine.world;
 
         Test.reset();
@@ -71,14 +91,17 @@
         var renderOptions = _engine.render.options;
         renderOptions.showAngleIndicator = true;
 
-        document.onkeydown = function(e) {
+        document.onkeydown = function (e) {
             e = e || window.event;
 
             var carBody = car.bodies[0],
                 forceMagnitude = 0.04 * carBody.mass,
-                force = { x: 0, y: 0 };
+                force = {
+                    x: 0,
+                    y: 0
+                };
 
-            switch(_keyboardMap[e.keyCode]) {
+            switch (_keyboardMap[e.keyCode]) {
                 case 'UP':
                 case 'RIGHT':
                     force.x = forceMagnitude;
@@ -89,11 +112,14 @@
                     break;
             }
 
-            Body.applyForce(carBody, { x: 0, y: 0 }, force);
+            Body.applyForce(carBody, {
+                x: 0,
+                y: 0
+            }, force);
         };
     };
 
-    Test.reset = function() {
+    Test.reset = function () {
         var _world = _engine.world;
 
         World.clear(_world);
@@ -105,19 +131,36 @@
         _sceneEvents = [];
 
         // reset mouse offset and scale (only required for Demo.views)
-        Mouse.setScale(_engine.input.mouse, { x: 1, y: 1 });
-        Mouse.setOffset(_engine.input.mouse, { x: 0, y: 0 });
+        Mouse.setScale(_engine.input.mouse, {
+            x: 1,
+            y: 1
+        });
+        Mouse.setOffset(_engine.input.mouse, {
+            x: 0,
+            y: 0
+        });
 
         _engine.enableSleeping = false;
         _engine.world.gravity.y = 1;
         _engine.world.gravity.x = 0;
         _engine.timing.timeScale = 1;
 
-        var offset = 25;
-        var ground = Bodies.rectangle(400, -offset, 800.5 + 2 * offset, 50.5, { isStatic: true }),
-           ceiling = Bodies.rectangle(400, 600 + offset, 800.5 + 2 * offset, 50.5, { isStatic: true }),
-          leftWall = Bodies.rectangle(-offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true }),
-         rightWall = Bodies.rectangle(800 + offset, 300, 50.5, 600.5 + 2 * offset, { isStatic: true });
+        var offset = 25,
+            canvas = _engine.render.canvas;
+
+        console.log(_engine.render.options.width);
+        var ground = Bodies.rectangle(canvas.width / 2, canvas.height + offset, canvas.width + offset, 50, {
+                isStatic: true
+            }),
+            ceiling = Bodies.rectangle(canvas.width / 2, -offset, canvas.width, 50, {
+                isStatic: true
+            }),
+            leftWall = Bodies.rectangle(-offset, canvas.height / 2, 50, canvas.height, {
+                isStatic: true
+            }),
+            rightWall = Bodies.rectangle(canvas.width + offset, canvas.height / 2, 50, canvas.height, {
+                isStatic: true
+            });
 
         // add the limits to the world
         World.add(_engine.world, [
